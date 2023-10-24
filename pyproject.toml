@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "demoapp"
+version = "0-dev"
+description = ""
+authors = ["Eirik W. Talberg <eirik@taldev.no>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.2"
+flake8 = "^6.1.0"
+flake8-pyproject = "^1.2.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
