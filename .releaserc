@@ -17,7 +17,7 @@
         [
             "@semantic-release-plus/docker",
             {
-                "name": "ghcr.io/my-namespace/my-repo:my-tag"
+                "name": "ghcr.io/eirik-talberg/python-demoapp:${version}"
             }
         ],
         [
@@ -28,5 +28,6 @@
                 ]
             }
         ]
-    ]
+    ],
+    "tagFormat": "${version}"
 }
