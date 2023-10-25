@@ -1,23 +1,36 @@
 {
     "branches": [
-        "main"
+        "main",
+        "release"
     ],
     "plugins": [
         "@semantic-release/commit-analyzer",
         "@semantic-release/release-notes-generator",
         "@semantic-release/changelog",
         [
-            "@semantic-release/git",
+            "@semantic-release/exec",
             {
-                "assets": [
-                    "CHANGELOG.md"
-                ]
+                "prepareCmd": "poetry version ${nextRelease.version}",
+                "publishCmd": "poetry build; docker build --tag eirik-talberg/python-demoapp ."
             }
         ],
         [
             "@semantic-release-plus/docker",
             {
-                "name": "ghcr.io/eirik-talberg/python-demoapp:${version}"
+                "name": {
+                    "registry": "ghcr.io",
+                    "namespace": "eirik-talberg",
+                    "repository": "python-demoapp"
+                },
+                "publishChannelTag": false
+            }
+        ],
+        [
+            "@semantic-release/git",
+            {
+                "assets": [
+                    "CHANGELOG.md"
+                ]
             }
         ],
         [
@@ -28,6 +41,5 @@
                 ]
             }
         ]
-    ],
-    "tagFormat": "${version}"
+    ]
 }
