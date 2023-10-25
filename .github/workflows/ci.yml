@@ -1,22 +1,24 @@
 name: CI
 on:
   push:
-    branches-ignore: [ "main" ]
+    branches-ignore: [ "main"]
   pull_request:
     branches: [ "main" ]
-
   workflow_dispatch:
-
+  workflow_call:
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: "3.11"
       - uses: Gr1N/setup-poetry@v8
-      - run: poetry --version
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
       - run: poetry install
       - run: poetry run flake8
       - run: poetry run pytest

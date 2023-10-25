@@ -2,18 +2,11 @@ name: Release
 on:
   push:
     branches: [ "main" ]
-jobs:
+  workflow_dispatch:
+jobs: 
   qa:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
-      - uses: Gr1N/setup-poetry@v8
-      - run: poetry install
-      - run: poetry run flake8
-      - run: poetry run pytest
+    uses: ./.github/workflows/ci.yml
+    secrets: inherit
   release:
     runs-on: ubuntu-latest
     needs: qa
@@ -26,8 +19,17 @@ jobs:
         with:
           python-version: "3.11"
       - uses: Gr1N/setup-poetry@v8
-      - run: poetry build
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v4
+        with:
+            extra_plugins: |
+                @semantic-release/exec
+                @semantic-release-plus/docker
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          DOCKER_USERNAME: eirik-talberg
+          DOCKER_PASSWORD: ${{ secrets.PERSONAL_ACCESS_TOKEN }}

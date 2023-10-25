@@ -24,6 +24,9 @@ COPY dist dist
 RUN /venv/bin/pip install dist/*.whl
 
 FROM base as final
+LABEL org.opencontainers.image.source=https://github.com/eirik-talberg/python-demoapp
+LABEL org.opencontainers.image.description="Python demoapp with semantic-release"
+LABEL org.opencontainers.image.licenses=MIT
 
 COPY --from=builder /venv /venv
 COPY entrypoint.sh .
