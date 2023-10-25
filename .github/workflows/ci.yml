@@ -4,6 +4,11 @@ on:
     branches-ignore: [ "main"]
   pull_request:
     branches: [ "main" ]
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
   workflow_dispatch:
   workflow_call:
 jobs:
@@ -11,6 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - uses: actions/setup-python@v4
         with:
           python-version: "3.11"
