@@ -23,7 +23,7 @@ jobs:
       - name: "Run flake8 linting"
         run: poetry run flake8
       - name: "Run pyTest with coverage report"
-        run: poetry run pytest --junitxml=report.xml --cov=demoapp tests/
+        run: poetry run pytest
       - name: Publish test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
