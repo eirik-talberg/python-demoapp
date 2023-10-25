@@ -20,5 +20,18 @@ jobs:
           path: ~/.cache/pypoetry/virtualenvs
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
       - run: poetry install
-      - run: poetry run flake8
-      - run: poetry run pytest
+      - name: "Run flake8 linting"
+        run: poetry run flake8
+      - name: "Run pyTest with coverage report"
+        run: poetry run pytest --junitxml=report.xml --cov=demoapp tests/
+      - name: Publish test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            reports/pytest.xml
+      - name: Publish Coverage report
+        uses: orgoro/coverage@v3.1
+        with:
+            coverageFile: reports/coverage.xml
+            token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
