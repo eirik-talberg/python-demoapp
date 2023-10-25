@@ -9,9 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      checks: write
-      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
@@ -27,14 +24,8 @@ jobs:
         run: poetry run flake8
       - name: "Run pyTest with coverage report"
         run: poetry run pytest
-      - name: Publish test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
+      - name: Pytest coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
         with:
-          files: |
-            reports/pytest.xml
-      - name: Publish Coverage report
-        uses: orgoro/coverage@v3.1
-        with:
-            coverageFile: reports/coverage.xml
-            token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          pytest-xml-coverage-path: ./reports/coverage.xml
+          junitxml-path: ./reports/pytest.xml
