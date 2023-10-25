@@ -13,6 +13,7 @@ python = "^3.11"
 pytest = "^7.4.2"
 flake8 = "^6.1.0"
 flake8-pyproject = "^1.2.3"
+pytest-cov = "^4.1.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -20,3 +21,10 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.flake8]
 max-line-length = 120
+
+[tool.pytest.ini_options]
+junit_suite_name = "demoapp"
+addopts = "--junitxml=reports/pytest.xml --cov=. --cov-report term --cov-report xml:reports/coverage.xml"
+
+[tool.coverage.run]
+omit = [ "tests/**" ]

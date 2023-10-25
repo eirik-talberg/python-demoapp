@@ -20,5 +20,13 @@ jobs:
           path: ~/.cache/pypoetry/virtualenvs
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
       - run: poetry install
-      - run: poetry run flake8
-      - run: poetry run pytest
+      - name: "Run flake8 linting"
+        run: poetry run flake8
+      - name: "Run pyTest with coverage report"
+        run: poetry run pytest
+      - name: Pytest coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          pytest-xml-coverage-path: ./reports/coverage.xml
+          junitxml-path: ./reports/pytest.xml
